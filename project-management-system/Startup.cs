@@ -1,3 +1,5 @@
+using JsonFlatFileDataStore;
+
 namespace project_management_system
 {
     using Microsoft.AspNetCore.Builder;
@@ -28,6 +30,9 @@ namespace project_management_system
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddSingleton<IDataStore>(new DataStore(@"E:\Dev Tasks\project-management-system\project-management-system\datastore.json"));
+            //services.AddSingleton<IDataStore>(new DataStore(@"E:\Dev Tasks\project-management-system\project-management-system\datastoretest.json"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
