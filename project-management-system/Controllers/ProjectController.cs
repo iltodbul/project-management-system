@@ -4,6 +4,7 @@ using JsonFlatFileDataStore;
 using project_management_system.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using project_management_system.Services;
 
 namespace project_management_system.Controllers
 {
@@ -19,16 +20,21 @@ namespace project_management_system.Controllers
     [Route("[controller]")]
     public class ProjectController : ControllerBase
     {
+        private readonly IProjectService _projectService;
         private readonly IDataStore _ds;
 
-        public ProjectController(IDataStore ds)
+        public ProjectController(IProjectService projectService, IDataStore ds)
         {
-            //_ds = new DataStore("/data.json");
+            _projectService = projectService;
             _ds = ds;
         }
 
         [HttpGet]
-        public async Task<ActionResult<object>> GetAll()
+        public IEnumerable<Project> GetAll() => _projectService.GetAllProjects();
+
+
+        [HttpHead]
+        public async Task<ActionResult<object>> Get()
         {
             //var newProject = new Project
             //{
@@ -47,10 +53,12 @@ namespace project_management_system.Controllers
 
             var prj = _ds.GetCollection<Project>("projects");
             var pr3 = prj.AsQueryable().FirstOrDefault(x => x.Id == 3);
-            pr3.Name = "The third project";
+            pr3.Name = "Third project";
             await prj.UpdateOneAsync(pr3.Id, pr3);
 
             var toListProjects = _ds.GetCollection<Project>("projects").AsQueryable().ToList();
+
+            _ds.Dispose();
 
             return toListProjects;
 

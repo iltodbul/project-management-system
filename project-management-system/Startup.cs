@@ -1,4 +1,5 @@
 using JsonFlatFileDataStore;
+using project_management_system.Services;
 
 namespace project_management_system
 {
@@ -33,6 +34,8 @@ namespace project_management_system
 
             services.AddSingleton<IDataStore>(new DataStore(@"E:\Dev Tasks\project-management-system\project-management-system\datastore.json"));
             //services.AddSingleton<IDataStore>(new DataStore(@"E:\Dev Tasks\project-management-system\project-management-system\datastoretest.json"));
+
+            services.AddTransient<IProjectService, ProjectService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
