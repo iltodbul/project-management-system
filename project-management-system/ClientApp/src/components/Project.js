@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Image } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
-
-import static_logo from '../assets/static_logo.png';
 
 export function Project() {
   const [project, setProject] = useState({});
+  const [taskId, setTaskId] = useState();
   const [loading, setLoading] = useState(true);
 
   const history = useHistory();
 
-  const routeChange = (e) => {
-    let path = `/fetch-data`; // /project/details?id={e.id}
-    history.push(path);
-  };
+  useEffect(() => {
+    if (taskId) {
+      let path = `/task/${taskId}`;
+      history.push(path);
+    }
+  }, [taskId]);
+
   useEffect(() => {
     fetch(`project${location.pathname}`)
       .then((response) => response.json())
@@ -23,7 +24,7 @@ export function Project() {
     setLoading(false);
   }, []);
 
-  function renderProjectsTable(a) {
+  function renderTasksTable(a) {
     return (
       <table className="table table-striped" aria-labelledby="tabelLabel">
         <thead>
@@ -33,16 +34,16 @@ export function Project() {
           </tr>
         </thead>
         <tbody>
-          {project.id ? (
+          {project['tasks'] ? (
             a.map((task) => (
-              <tr key={task.id}>
+              <tr onClick={() => setTaskId(task.id)} key={task.id}>
                 <td>{task.title}</td>
                 <td>{task.status}</td>
               </tr>
             ))
           ) : (
             <tr>
-              <td>Loading...</td>
+              <td>This project has not task</td>
             </tr>
           )}
         </tbody>
@@ -55,7 +56,7 @@ export function Project() {
       <em>Loading...</em>
     </p>
   ) : (
-    renderProjectsTable(project['tasks'])
+    renderTasksTable(project['tasks'])
   );
 
   return (

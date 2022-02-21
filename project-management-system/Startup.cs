@@ -37,6 +37,7 @@ namespace project_management_system
             //services.AddSingleton<IDataStore>(new DataStore(@"E:\Dev Tasks\project-management-system\project-management-system\datastoretest.json"));
 
             services.AddTransient<IProjectService, ProjectService>();
+            services.AddTransient<ITaskService, TaskService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
