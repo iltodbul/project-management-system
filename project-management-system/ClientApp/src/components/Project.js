@@ -15,7 +15,7 @@ export function Project() {
     history.push(path);
   };
   useEffect(() => {
-    fetch(`project/details?id=1`)
+    fetch(`project${location.pathname}`)
       .then((response) => response.json())
       .then((data) => {
         setProject(data);
@@ -28,16 +28,16 @@ export function Project() {
       <table className="table table-striped" aria-labelledby="tabelLabel">
         <thead>
           <tr>
-            <th>{project.name}</th>
-            <th>Empty for now</th>
+            <th>Title</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
-          {project.name ? (
+          {project.id ? (
             a.map((task) => (
               <tr key={task.id}>
-                <td>{task.id}</td>
                 <td>{task.title}</td>
+                <td>{task.status}</td>
               </tr>
             ))
           ) : (
@@ -60,8 +60,7 @@ export function Project() {
 
   return (
     <div>
-      <h1 id="tabelLabel">List of all projects</h1>
-      <p>This component fetching data from the server.</p>
+      <h1 id="tabelLabel">List of all task in {project.name} project</h1>
 
       {contents}
     </div>

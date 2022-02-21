@@ -1,11 +1,7 @@
-﻿using project_management_system.Models.Enums;
-
-namespace project_management_system.Models
+﻿namespace project_management_system.Models
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
+    using project_management_system.Models.Enums;
 
     public class Task
     {

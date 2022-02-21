@@ -5,6 +5,7 @@ using project_management_system.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using project_management_system.Services;
+using project_management_system.ViewModels;
 
 namespace project_management_system.Controllers
 {
@@ -33,8 +34,8 @@ namespace project_management_system.Controllers
         public IEnumerable<Project> GetAll() => _projectService.GetAllProjects();
 
         [HttpGet]
-        [Route("details")]
-        public Project Details(int id)
+        [Route("details/{id:int}")]
+        public ProjectViewModel Details(int id)
         {
             return _projectService.GetById(id);
         }

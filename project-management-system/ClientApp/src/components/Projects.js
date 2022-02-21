@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Image } from 'react-bootstrap';
+import { Image, Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 
 import static_logo from '../assets/static_logo.png';
 
 export function Projects() {
   const [projects, setProjects] = useState([]);
+  const [projectId, setProjectId] = useState();
   const [loading, setLoading] = useState(true);
 
   const history = useHistory();
 
-  const routeChange = (event) => {
-    console.log(event.target.id)
-    let path = `/details`; // /project/details?id=${e.id}
-    history.push(path);
-  };
+  useEffect(() => {
+    if (projectId) {
+      let path = `/details/${projectId}`;
+      history.push(path);
+    }
+  }, [projectId]);
 
   useEffect(() => {
     fetch('project')
@@ -32,11 +34,12 @@ export function Projects() {
           <tr>
             <th>Logo</th>
             <th>Project name</th>
+            <th>Details</th>
           </tr>
         </thead>
         <tbody>
           {projects.map((project) => (
-            <tr id="{project.id}" onClick={routeChange} key={project.id}>
+            <tr onClick={() => setProjectId(project.id)} key={project.id}>
               <td>
                 <Image
                   style={{
@@ -49,6 +52,9 @@ export function Projects() {
                 ></Image>
               </td>
               <td>{project.name}</td>
+              <td>
+                <Button>View more</Button>
+              </td>
             </tr>
           ))}
         </tbody>

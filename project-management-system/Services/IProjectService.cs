@@ -1,16 +1,14 @@
-﻿using project_management_system.Models;
-
-namespace project_management_system.Services
+﻿namespace project_management_system.Services
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
+
+    using project_management_system.Models;
+    using project_management_system.ViewModels;
 
     public interface IProjectService
     {
         IEnumerable<Project> GetAllProjects();
 
-        Project GetById(int id);
+        ProjectViewModel GetById(int id);
     }
 }

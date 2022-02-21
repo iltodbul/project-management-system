@@ -1,6 +1,3 @@
-using JsonFlatFileDataStore;
-using project_management_system.Services;
-
 namespace project_management_system
 {
     using Microsoft.AspNetCore.Builder;
@@ -10,6 +7,10 @@ namespace project_management_system
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+
+    using JsonFlatFileDataStore;
+
+    using project_management_system.Services;
 
     public class Startup
     {
