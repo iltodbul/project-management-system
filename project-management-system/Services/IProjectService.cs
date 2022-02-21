@@ -10,5 +10,7 @@ namespace project_management_system.Services
     public interface IProjectService
     {
         IEnumerable<Project> GetAllProjects();
+
+        Project GetById(int id);
     }
 }

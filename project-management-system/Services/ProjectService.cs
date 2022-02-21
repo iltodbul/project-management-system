@@ -25,5 +25,13 @@ namespace project_management_system.Services
 
             return projects;
         }
+
+        public Project GetById(int id)
+        {
+            return _ds
+                .GetCollection<Project>("projects")
+                .AsQueryable()
+                .FirstOrDefault(x => x.Id == id);
+        }
     }
 }

@@ -4,53 +4,47 @@ import { useHistory } from 'react-router-dom';
 
 import static_logo from '../assets/static_logo.png';
 
-export function Projects() {
-  const [projects, setProjects] = useState([]);
+export function Project() {
+  const [project, setProject] = useState({});
   const [loading, setLoading] = useState(true);
 
   const history = useHistory();
 
-  const routeChange = (event) => {
-    console.log(event.target.id)
-    let path = `/details`; // /project/details?id=${e.id}
+  const routeChange = (e) => {
+    let path = `/fetch-data`; // /project/details?id={e.id}
     history.push(path);
   };
-
   useEffect(() => {
-    fetch('project')
+    fetch(`project/details?id=1`)
       .then((response) => response.json())
       .then((data) => {
-        setProjects(data);
+        setProject(data);
       });
     setLoading(false);
   }, []);
 
-  function renderProjectsTable(projects) {
+  function renderProjectsTable(a) {
     return (
       <table className="table table-striped" aria-labelledby="tabelLabel">
         <thead>
           <tr>
-            <th>Logo</th>
-            <th>Project name</th>
+            <th>{project.name}</th>
+            <th>Empty for now</th>
           </tr>
         </thead>
         <tbody>
-          {projects.map((project) => (
-            <tr id="{project.id}" onClick={routeChange} key={project.id}>
-              <td>
-                <Image
-                  style={{
-                    width: '6rem',
-                    height: '6rem',
-                    display: 'inline-flex',
-                  }}
-                  fluid={true}
-                  src={static_logo}
-                ></Image>
-              </td>
-              <td>{project.name}</td>
+          {project.name ? (
+            a.map((task) => (
+              <tr key={task.id}>
+                <td>{task.id}</td>
+                <td>{task.title}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td>Loading...</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     );
@@ -61,7 +55,7 @@ export function Projects() {
       <em>Loading...</em>
     </p>
   ) : (
-    renderProjectsTable(projects)
+    renderProjectsTable(project['tasks'])
   );
 
   return (

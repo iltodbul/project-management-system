@@ -32,6 +32,13 @@ namespace project_management_system.Controllers
         [HttpGet]
         public IEnumerable<Project> GetAll() => _projectService.GetAllProjects();
 
+        [HttpGet]
+        [Route("details")]
+        public Project Details(int id)
+        {
+            return _projectService.GetById(id);
+        }
+
 
         [HttpHead]
         public async Task<ActionResult<object>> Get()
