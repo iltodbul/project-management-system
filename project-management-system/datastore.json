@@ -143,11 +143,6 @@
           "createdAt": "2022-02-18T19:01:55"
         }
       ]
-    },
-    {
-      "id": 3,
-      "name": "Third project",
-      "tasks": []
     }
   ]
 }

@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Image, Button } from 'react-bootstrap';
+import { Image } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
+import { Button } from 'reactstrap';
 
+import { AddProject } from './modals/AddProject';
 import static_logo from '../assets/static_logo.png';
 
 export function Projects() {
   const [projects, setProjects] = useState([]);
   const [projectId, setProjectId] = useState();
   const [loading, setLoading] = useState(true);
+  const [modal, setModal] = useState(false);
 
   const history = useHistory();
 
@@ -53,7 +56,9 @@ export function Projects() {
               </td>
               <td>{project.name}</td>
               <td>
-                <Button>View more</Button>
+                <Button color="primary" size="lg">
+                  View more
+                </Button>
               </td>
             </tr>
           ))}
@@ -74,8 +79,12 @@ export function Projects() {
     <div>
       <h1 id="tabelLabel">List of all projects</h1>
       <p>This component fetching data from the server.</p>
-
       {contents}
+      <Button onClick={() => setModal(true)} color="success" size="lg">
+        Add new project
+      </Button>
+      
+      {modal ? <AddProject /> : ''}
     </div>
   );
 }

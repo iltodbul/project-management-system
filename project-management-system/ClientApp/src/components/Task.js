@@ -2,15 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
+import { EditTaskModal } from './modals/EditTaskModal';
+
 export function Task() {
   const [task, setTask] = useState({});
   const [loading, setLoading] = useState(true);
+  const [modal, setModal] = useState(false);
 
   const history = useHistory();
 
   const routeChange = () => {
-    let path = `/fetch-data`;
-    history.push(path);
+    setModal(true);
   };
 
   useEffect(() => {
@@ -92,6 +94,8 @@ export function Task() {
       {/* <h1 id="tabelLabel">Selected task's details</h1> */}
 
       {contents}
+
+      {modal ? <EditTaskModal /> : ''}
     </div>
   );
 }

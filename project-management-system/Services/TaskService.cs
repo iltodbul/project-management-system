@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using JsonFlatFileDataStore;
-using project_management_system.Extensions;
-using project_management_system.Models;
-
-namespace project_management_system.Services
+﻿namespace project_management_system.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using JsonFlatFileDataStore;
+
+    using project_management_system.Models.Enums;
+    using project_management_system.Extensions;
+    using project_management_system.Models;
     using project_management_system.ViewModels;
 
     public class TaskService : ITaskService
@@ -19,20 +22,7 @@ namespace project_management_system.Services
 
         public TasksViewModel GetById(int id)
         {
-            var allProjects = _ds.GetCollection<Project>("projects").AsQueryable().ToList();
-
-            var tasks = new List<Models.Task>();
-            foreach (Project project in allProjects)
-            {
-                foreach (Models.Task t in project.Tasks)
-                {
-                    tasks.Add(t);
-                }
-            }
-
-            var task = tasks.Find(x => x.Id == id);
-
-            if (task == null) return null;
+            var task = GetTaskById(id);
 
             var taskViewModel = new TasksViewModel()
             {
@@ -48,6 +38,46 @@ namespace project_management_system.Services
             };
 
             return taskViewModel;
+        }
+
+        public bool Edit(TaskInputViewModel model)
+        {
+            var taskId = model.Id;
+
+            var allTasks = GetAllTasks();
+
+            var newTask = new Models.Task()
+            {
+                Id = model.Id,
+                Status = (Status)model.Status,
+                Priority = (Priority)model.Priority,
+                TaskType = (TaskType)model.TaskType,
+                CreatedAt = DateTime.Parse(model.CreatedAt),
+                Assignee = model.Assignee,
+                Description = model.Description,
+                Estimate = model.Estimate,
+                Title = model.Title
+            };
+
+            return true;
+        }
+
+        private Task GetTaskById(int id)
+        {
+            var tasks = GetAllTasks();
+
+            var task = tasks.Find(x => x.Id == id);
+
+            return task ?? null;
+        }
+
+        private List<Task> GetAllTasks()
+        {
+            var allProjects = _ds.GetCollection<Project>("projects").AsQueryable().ToList();
+
+            var tasks = allProjects.SelectMany(project => project.Tasks).ToList();
+
+            return tasks;
         }
     }
 }
