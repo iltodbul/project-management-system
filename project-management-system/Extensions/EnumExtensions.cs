@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace project_management_system.Extensions
 {

@@ -1,7 +1,11 @@
-﻿namespace project_management_system.Models.Enums
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+namespace project_management_system.Models.Enums
 {
     using System.ComponentModel.DataAnnotations;
-    
+
+    //[JsonConverter(typeof(StringEnumConverter))]
     public enum Status
     {
         Undefined = 0,

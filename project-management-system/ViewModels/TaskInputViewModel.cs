@@ -10,11 +10,11 @@
 
         public string Assignee { get; set; }
 
-        public int TaskType { get; set; }
+        public string TaskType { get; set; }
 
-        public int Priority { get; set; }
+        public string Priority { get; set; }
 
-        public int Status { get; set; }
+        public string Status { get; set; }
 
         public int Estimate { get; set; }
 

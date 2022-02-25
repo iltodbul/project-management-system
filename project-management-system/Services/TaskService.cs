@@ -1,4 +1,12 @@
-﻿namespace project_management_system.Services
+﻿using System.IO;
+
+using Microsoft.AspNetCore.Mvc;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
+
+namespace project_management_system.Services
 {
     using System;
     using System.Collections.Generic;
@@ -42,16 +50,52 @@
 
         public bool Edit(TaskInputViewModel model)
         {
-            var taskId = model.Id;
+            var filePath = @"E:\Dev Tasks\project-management-system\project-management-system\datastore2.json";
+            string result = string.Empty;
 
-            var allTasks = GetAllTasks();
+            using (StreamReader r = new StreamReader(filePath))
+            {
+                var json = r.ReadToEnd();
+
+                var jObject = JObject.Parse(json);
+                JArray jArray = (JArray)jObject["projects"];
+                IList<Project> projects = jArray.ToObject<IList<Project>>();
+
+                EditTask(projects, model);
+
+                var newJArray = new JArray();
+                foreach (Project project in projects)
+                {
+                    newJArray.Add(JObject.FromObject(project));
+                }
+                var newJObject = new JObject();
+                newJObject["projects"] = newJArray;
+
+                DefaultContractResolver contractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                };
+                result = JsonConvert.SerializeObject(newJObject, new JsonSerializerSettings
+                {
+                    ContractResolver = contractResolver,
+                    Formatting = Formatting.Indented
+                });
+            }
+            File.WriteAllText(filePath, result);
+
+            return true;
+        }
+
+        private void EditTask(IList<Project> projects, TaskInputViewModel model)
+        {
+            Models.Task taskToChange = projects.SelectMany(x => x.Tasks).FirstOrDefault(t => t.Id == model.Id);
 
             var newTask = new Models.Task()
             {
                 Id = model.Id,
-                Status = (Status)model.Status,
-                Priority = (Priority)model.Priority,
-                TaskType = (TaskType)model.TaskType,
+                Status = Enum.Parse<Status>(model.Status),
+                Priority = Enum.Parse<Priority>(model.Priority),
+                TaskType = Enum.Parse<TaskType>(model.TaskType),
                 CreatedAt = DateTime.Parse(model.CreatedAt),
                 Assignee = model.Assignee,
                 Description = model.Description,
@@ -59,7 +103,23 @@
                 Title = model.Title
             };
 
-            return true;
+            var newProjects = new List<Project>();
+
+            for (int i = 0; i < projects.Count; i++)
+            {
+                var project = projects[i];
+                if (project.Tasks.Contains(taskToChange))
+                {
+                    var tasks = project.Tasks.ToList();
+                    tasks.Replace<Models.Task>(taskToChange, newTask);
+                    project.Tasks = tasks;
+                    newProjects.Add(project);
+                }
+                else
+                {
+                    newProjects.Add(project);
+                }
+            }
         }
 
         private Task GetTaskById(int id)
@@ -71,7 +131,7 @@
             return task ?? null;
         }
 
-        private List<Task> GetAllTasks()
+        private List<Models.Task> GetAllTasks()
         {
             var allProjects = _ds.GetCollection<Project>("projects").AsQueryable().ToList();
 

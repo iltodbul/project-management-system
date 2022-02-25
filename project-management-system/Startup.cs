@@ -1,3 +1,6 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 namespace project_management_system
 {
     using Microsoft.AspNetCore.Builder;
@@ -25,7 +28,11 @@ namespace project_management_system
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddJsonOptions(o =>
+                {
+                    o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -33,7 +40,7 @@ namespace project_management_system
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddSingleton<IDataStore>(new DataStore(@"E:\Dev Tasks\project-management-system\project-management-system\datastore.json"));
+            services.AddSingleton<IDataStore>(new DataStore(@"E:\Dev Tasks\project-management-system\project-management-system\datastore2.json"));
             //services.AddSingleton<IDataStore>(new DataStore(@"E:\Dev Tasks\project-management-system\project-management-system\datastoretest.json"));
 
             services.AddTransient<IProjectService, ProjectService>();
@@ -58,7 +65,14 @@ namespace project_management_system
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
-            app.UseRouting();
+            app.UseCors(options => options
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod())
+                .UseHttpsRedirection();
+
+            app.UseRouting()
+                .UseFileServer();
 
             app.UseEndpoints(endpoints =>
             {

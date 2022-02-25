@@ -29,6 +29,7 @@
         [HttpPut]
         public IActionResult Edit(TaskInputViewModel model)
         {
+            _taskService.Edit(model);
             return Ok();
         }
     }

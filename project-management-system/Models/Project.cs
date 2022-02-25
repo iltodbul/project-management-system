@@ -1,7 +1,10 @@
 ﻿namespace project_management_system.Models
 {
+    using System;
+
     using System.Collections.Generic;
 
+    [Serializable]
     public class Project
     {
         public Project()
@@ -13,6 +16,6 @@
 
         public string Name { get; set; }
 
-        public ICollection<Task> Tasks { get; set; }
+        public ICollection<Models.Task> Tasks { get; set; }
     }
 }

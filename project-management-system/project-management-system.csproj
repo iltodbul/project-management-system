@@ -24,6 +24,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="datastore2.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="datastore1.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="datastore.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
