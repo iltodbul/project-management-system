@@ -17,8 +17,11 @@ namespace project_management_system
 
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IWebHostEnvironment _environment;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
+            _environment = environment;
             Configuration = configuration;
         }
 
@@ -40,8 +43,8 @@ namespace project_management_system
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddSingleton<IDataStore>(new DataStore(@"E:\Dev Tasks\project-management-system\project-management-system\datastore2.json"));
-            //services.AddSingleton<IDataStore>(new DataStore(@"E:\Dev Tasks\project-management-system\project-management-system\datastoretest.json"));
+            var path = _environment.WebRootPath + @"\dataStore\datastore.json";
+            services.AddSingleton<IDataStore>(new DataStore(path, true, null, true));
 
             services.AddTransient<IProjectService, ProjectService>();
             services.AddTransient<ITaskService, TaskService>();

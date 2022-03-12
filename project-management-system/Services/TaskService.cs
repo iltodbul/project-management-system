@@ -1,5 +1,5 @@
 ﻿using System.IO;
-
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 using Newtonsoft.Json;
@@ -22,10 +22,12 @@ namespace project_management_system.Services
     public class TaskService : ITaskService
     {
         private readonly IDataStore _ds;
+        private readonly IWebHostEnvironment _environment;
 
-        public TaskService(IDataStore ds)
+        public TaskService(IDataStore ds, IWebHostEnvironment environment)
         {
             _ds = ds;
+            _environment = environment;
         }
 
         public TasksViewModel GetById(int id)
@@ -50,7 +52,7 @@ namespace project_management_system.Services
 
         public bool Edit(TaskInputViewModel model)
         {
-            var filePath = @"E:\Dev Tasks\project-management-system\project-management-system\datastore2.json";
+            var filePath = _environment.WebRootPath + @"\dataStore\datastore.json";
             string result = string.Empty;
 
             using (StreamReader r = new StreamReader(filePath))
